@@ -6,6 +6,8 @@ Movie Search build with React and [OMDB API](http://www.omdbapi.com)
 
 [Demo Website](https://movie-search-ok.vercel.app/)
 
+[CodeSandbox](https://codesandbox.io/s/movie-search-1ufcw)
+
 ## Built With
 
 - NextJS

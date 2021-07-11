@@ -103,11 +103,7 @@ const MovieListContainer = (movies, load, search, updateKeyword) => {
       <Box>
         {status == 'error' && (
           <>
-            <MovieNotFound
-              error={error}
-              load={load}
-              updateKeyword={updateKeyword}
-            />
+            <MovieNotFound error={error} load={load} />
           </>
         )}
       </Box>

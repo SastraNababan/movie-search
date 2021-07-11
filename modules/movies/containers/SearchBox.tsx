@@ -68,14 +68,18 @@ const SearchBox = (props) => {
           </InputGroup>
         </HStack>
         {showSearchSuggestion && keyword && (
-          <SearchResult q={{ s: keyword }} onSelectItem={onSelectItem} />
+          <SearchSuggestion
+            q={{ s: keyword }}
+            onSelectItem={onSelectItem}
+            data-testid="search-suggestion"
+          />
         )}
       </Box>
     </form>
   )
 }
 
-const SearchResult = ({ q, onSelectItem }) => {
+const SearchSuggestion = ({ q, onSelectItem }) => {
   const { data } = useQuerySearchMovies(q)
   if (!data) return null
   return (
