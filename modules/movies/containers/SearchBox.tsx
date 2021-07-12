@@ -19,7 +19,10 @@ import useQuerySearchMovies from '../hooks/useQuerySearchMovie'
 
 const SearchBox = (props) => {
   const [input, setInput] = useState('')
+  const inputRef = React.useRef<HTMLInputElement>()
+  // const [keyword] = useDebounce(inputRef?.current?.value, 500)
   const [keyword] = useDebounce(input, 500)
+  // const keyword = input
   const [showSearchSuggestion, setShowSearchSuggestion] = useState(false)
 
   const onSubmit = () => {
@@ -37,11 +40,8 @@ const SearchBox = (props) => {
 
   const onSelectItem = (item) => {
     setInput(item)
-    inputRef.current.value = item
     onSubmit()
   }
-
-  const inputRef = React.useRef<HTMLInputElement>()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,42 +55,42 @@ const SearchBox = (props) => {
             />
             <Input
               placeholder="Search movies ..."
-              ref={inputRef}
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setShowSearchSuggestion(true)}
               onBlur={() => setShowSearchSuggestion(false)}
+              value={input}
             />
-            {inputRef?.current?.value && (
+            {inputRef && (
               <InputRightElement width="4.5rem">
-                <CloseButton onClick={() => (inputRef.current.value = '')} />
+                <CloseButton
+                  onClick={() => {
+                    setInput('')
+                  }}
+                />
               </InputRightElement>
             )}
           </InputGroup>
         </HStack>
         {showSearchSuggestion && keyword && (
-          <SearchSuggestion
-            q={{ s: keyword }}
-            onSelectItem={onSelectItem}
-            data-testid="search-suggestion"
-          />
+          <SearchSuggestion q={{ s: keyword }} onSelectItem={onSelectItem} />
         )}
       </Box>
     </form>
   )
 }
 
-const SearchSuggestion = ({ q, onSelectItem }) => {
+export const SearchSuggestion = ({ q, onSelectItem }) => {
   const { data } = useQuerySearchMovies(q)
-  if (!data) return null
   return (
     <Box
+      data-testid="search-suggestion"
       position="absolute"
-      // bg="gray.100"
       bg={useColorModeValue('white', 'gray.700')}
       p={4}
       shadow="md"
       width="100%"
       zIndex="100"
+      visibility={data ? 'visible' : 'hidden'}
     >
       <UnorderedList>
         {data &&
