@@ -1,6 +1,6 @@
 import SearchBox from '@modules/movies/containers/SearchBox'
-import React from 'react'
-import { render, screen, fireEvent } from './testUtils'
+import { act } from 'react-dom/test-utils'
+import { fireEvent, render, screen, waitFor } from './testUtils'
 
 describe('Search Test', () => {
   test('smoke test', () => {
@@ -36,5 +36,29 @@ describe('Search Test', () => {
     const buttonCloseEl = screen.getByRole('button') as HTMLInputElement
     fireEvent.click(buttonCloseEl)
     expect(inputlEl.value).toBe('')
+  })
+
+  it('should show Search Suggestion ', async () => {
+    const result = render(<SearchBox />)
+    const inputEl = screen.getByRole('textbox') as HTMLInputElement
+    act(() => {
+      fireEvent.change(inputEl, { target: { value: 'Bat' } })
+    })
+    await waitFor(() => {
+      fireEvent.change(inputEl, { target: { value: 'Bat' } })
+      expect(inputEl.value).toBe('Bat')
+    })
+
+    await waitFor(() => {
+      inputEl.focus()
+    })
+    expect(inputEl).toHaveFocus()
+
+    await waitFor(() => {
+      expect(
+        result.getByTestId('search-suggestion') as HTMLDivElement
+      ).toBeInTheDocument()
+    })
+    // screen.debug()
   })
 })

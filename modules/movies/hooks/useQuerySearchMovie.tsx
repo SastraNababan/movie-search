@@ -9,8 +9,11 @@ const searchMovies = async (q) => {
   let url = `${API_URL}`
   url = `${url}&${queryString}&page=1`
 
+  // axios.get(url).then((response) => response.data)
+
   try {
     const response = await axios.get(url)
+
     if (response.data.Response === 'False') {
       throw new Error(response.data.Error)
     }
